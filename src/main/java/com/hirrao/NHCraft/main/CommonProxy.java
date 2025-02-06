@@ -6,7 +6,11 @@ import com.hirrao.NHCraft.Tags;
 import com.hirrao.NHCraft.config.Config;
 import com.hirrao.NHCraft.loader.RecipesLoader;
 
-import cpw.mods.fml.common.event.*;
+import cpw.mods.fml.common.event.FMLInitializationEvent;
+import cpw.mods.fml.common.event.FMLLoadCompleteEvent;
+import cpw.mods.fml.common.event.FMLPostInitializationEvent;
+import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+import cpw.mods.fml.common.event.FMLServerStartingEvent;
 
 public class CommonProxy {
 
