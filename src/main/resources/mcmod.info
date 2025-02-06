@@ -6,7 +6,7 @@
 		"description": "修改部分GT New Horizons的合成表",
 		"version": "${modVersion}",
 		"mcversion": "${minecraftVersion}",
-		"url": "https://github.com/SinTh0r4s/MyMod",
+		"url": "https://github.com/hirrao/NHCraft",
 		"updateUrl": "",
 		"authorList": ["SinTho0r4s"],
 		"credits": "",
