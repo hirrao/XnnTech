@@ -25,14 +25,6 @@ public class AE2Recipes implements IRecipePoll {
 
     public void loadRecipes() {
         if (enableAE2Recipes) {
-            /*
-             * GTValues.RA.stdBuilder()
-             * .itemInputs(GTUtility.getIntegratedCircuit(13), FLUID_INTERFACE)
-             * .itemOutputs(ItemList.Hatch_CraftingInput_Bus_ME.get(1))
-             * .duration(15 * SECONDS)
-             * .eut(7680)
-             * .addTo(RecipeMaps.assemblerRecipes);
-             */
             GTValues.RA.stdBuilder()
                 .itemInputs(
                     GTUtility.getIntegratedCircuit(1),
