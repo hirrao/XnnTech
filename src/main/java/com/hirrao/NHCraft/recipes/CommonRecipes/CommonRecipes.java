@@ -1,6 +1,6 @@
 package com.hirrao.NHCraft.recipes.CommonRecipes;
 
-import static com.hirrao.NHCraft.config.Config.enableAE2Recipes;
+import static com.hirrao.NHCraft.config.CommonConfig.enableAE2Recipes;
 
 import com.hirrao.NHCraft.recipes.IRecipePoll;
 

@@ -3,7 +3,6 @@ package com.hirrao.NHCraft.main;
 import static com.hirrao.NHCraft.utils.Log.LOG;
 
 import com.hirrao.NHCraft.Tags;
-import com.hirrao.NHCraft.config.Config;
 import com.hirrao.NHCraft.loader.RecipesLoader;
 
 import cpw.mods.fml.common.event.FMLInitializationEvent;
@@ -12,13 +11,12 @@ import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
 
+@SuppressWarnings("unused")
 public class CommonProxy {
 
     // preInit "Run before anything else. Read your config, create blocks, items, etc, and register them with the
     // GameRegistry." (Remove if not needed)
     public void preInit(FMLPreInitializationEvent event) {
-        Config.synchronizeConfiguration(event.getSuggestedConfigurationFile());
-
         LOG.info("Starting with Version " + Tags.VERSION);
     }
 

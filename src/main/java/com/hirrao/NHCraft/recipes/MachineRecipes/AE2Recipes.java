@@ -1,6 +1,6 @@
 package com.hirrao.NHCraft.recipes.MachineRecipes;
 
-import static com.hirrao.NHCraft.config.Config.enableAE2Recipes;
+import static com.hirrao.NHCraft.config.CommonConfig.enableAE2Recipes;
 import static gregtech.api.util.GTRecipeBuilder.SECONDS;
 
 import net.minecraft.item.ItemStack;
