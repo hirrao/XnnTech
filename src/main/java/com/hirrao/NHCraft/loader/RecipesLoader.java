@@ -8,7 +8,8 @@ import com.hirrao.NHCraft.recipes.MachineRecipes.ProgrammableHatchesRecipes;
 public class RecipesLoader {
 
     public static void loadRecipes() {
-        IRecipePoll[] craftRecipesPoll = { new CommonRecipes(), new MEInputRecipes(), new ProgrammableHatchesRecipes() };
+        IRecipePoll[] craftRecipesPoll = { new CommonRecipes(), new MEInputRecipes(),
+            new ProgrammableHatchesRecipes() };
         for (IRecipePoll recipePoll : craftRecipesPoll) {
             recipePoll.loadRecipes();
         }
