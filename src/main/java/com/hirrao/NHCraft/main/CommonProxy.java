@@ -2,7 +2,10 @@ package com.hirrao.NHCraft.main;
 
 import static com.hirrao.NHCraft.utils.Log.LOG;
 
+import com.gtnewhorizon.gtnhlib.config.ConfigException;
+import com.gtnewhorizon.gtnhlib.config.ConfigurationManager;
 import com.hirrao.NHCraft.Tags;
+import com.hirrao.NHCraft.config.CommonConfig;
 import com.hirrao.NHCraft.loader.RecipesLoader;
 
 import cpw.mods.fml.common.event.FMLInitializationEvent;
@@ -18,6 +21,11 @@ public class CommonProxy {
     // GameRegistry." (Remove if not needed)
     public void preInit(FMLPreInitializationEvent event) {
         LOG.info("Starting with Version " + Tags.VERSION);
+        try {
+            ConfigurationManager.registerConfig(CommonConfig.class);
+        } catch (ConfigException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     // load "Do your mod setup. Build whatever data structures you care about. Register recipes." (Remove if not needed)

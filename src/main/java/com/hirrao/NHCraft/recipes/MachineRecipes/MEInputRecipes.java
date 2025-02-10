@@ -1,6 +1,6 @@
 package com.hirrao.NHCraft.recipes.MachineRecipes;
 
-import static com.hirrao.NHCraft.config.CommonConfig.enableAE2Recipes;
+import static com.hirrao.NHCraft.config.CommonConfig.enableMEInputRecipes;
 import static gregtech.api.util.GTRecipeBuilder.SECONDS;
 
 import net.minecraft.item.ItemStack;
@@ -13,7 +13,7 @@ import gregtech.api.enums.ItemList;
 import gregtech.api.recipe.RecipeMaps;
 import gregtech.api.util.GTUtility;
 
-public class AE2Recipes implements IRecipePoll {
+public class MEInputRecipes implements IRecipePoll {
 
     public static final ItemStack FLUID_INTERFACE = new ItemStack(GameRegistry.findItem("ae2fc", "fluid_interface"));
     public static final ItemStack PART_FLUID_INTERFACE = new ItemStack(
@@ -23,8 +23,9 @@ public class AE2Recipes implements IRecipePoll {
         4,
         30);
 
+    @Override
     public void loadRecipes() {
-        if (enableAE2Recipes) {
+        if (enableMEInputRecipes) {
             GTValues.RA.stdBuilder()
                 .itemInputs(
                     GTUtility.getIntegratedCircuit(1),
