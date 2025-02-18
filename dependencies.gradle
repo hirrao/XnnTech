@@ -38,7 +38,10 @@ dependencies {
     api("com.github.GTNewHorizons:GTNHLib:0.6.10:dev")
     //implementation('com.github.GTNewHorizons:NewHorizonsCoreMod:2.7.92:dev')
     //implementation('com.github.GTNewHorizons:AE2FluidCraft-Rework:1.4.28-gtnh:dev') { transitive = false }
-    //implementation("com.github.reobf:Programmable-Hatches-Mod:v0.1.2p7-beta:dev")
+    implementation("com.github.reobf:Programmable-Hatches-Mod:v0.1.2p7-beta:dev") {
+        //不知道为啥这里会有一个不是dev版本的unimixins, 排除掉防止冲突
+        exclude group : "io.github.legacymoddingmc"
+    }
 
     runtimeOnlyNonPublishable('com.github.GTNewHorizons:Angelica:1.0.0-beta33:dev') { transitive = false }
     runtimeOnlyNonPublishable('com.github.GTNewHorizons:ServerUtilities:2.1.22:dev') { transitive = false }
