@@ -15,6 +15,7 @@ import gregtech.api.enums.ItemList;
 import gregtech.api.enums.Materials;
 import gregtech.api.recipe.RecipeMaps;
 import gregtech.api.util.GTModHandler;
+import gtPlusPlus.api.recipe.GTPPRecipeMaps;
 
 public class ProgrammableHatchesRecipes implements IRecipePoll {
 
@@ -25,7 +26,15 @@ public class ProgrammableHatchesRecipes implements IRecipePoll {
             final ItemStack PROGRAMMING_COVER = GTModHandler
                 .getModItem(ProgrammableHatches.ID, "proghatches.cover", 1L, 0);
             final ItemStack PROGRAMMABLE_CRAFTINGINPUT_BUFFER = GTModHandler
-                .getModItem(GregTech.ID, "gt.blockmachines", 1, 22609);
+                .getModItem(GregTech.ID, "gt.blockmachines", 1, 22069);
+            // 编程样板输入总成配方
+            GTValues.RA.stdBuilder()
+                .itemInputs(ItemList.Hatch_CraftingInput_Bus_ME.get(1), PROGRAMMING_COVER)
+                .fluidInputs(Materials.AdvancedGlue.getFluid(4000))
+                .itemOutputs(PROGRAMMABLE_CRAFTINGINPUT_BUFFER)
+                .duration(20 * SECONDS)
+                .eut(7680)
+                .addTo(GTPPRecipeMaps.mixerNonCellRecipes);
             GTValues.RA.stdBuilder()
                 .itemInputs(ItemList.Hatch_CraftingInput_Bus_ME.get(1), PROGRAMMING_COVER)
                 .fluidInputs(Materials.AdvancedGlue.getFluid(4000))
