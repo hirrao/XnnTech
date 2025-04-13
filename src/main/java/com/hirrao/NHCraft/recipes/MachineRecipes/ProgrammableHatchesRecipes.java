@@ -8,8 +8,6 @@ import static gregtech.api.util.GTRecipeBuilder.SECONDS;
 
 import net.minecraft.item.ItemStack;
 
-import com.hirrao.NHCraft.recipes.IRecipePoll;
-
 import gregtech.api.enums.GTValues;
 import gregtech.api.enums.ItemList;
 import gregtech.api.enums.Materials;
@@ -17,10 +15,9 @@ import gregtech.api.recipe.RecipeMaps;
 import gregtech.api.util.GTModHandler;
 import gtPlusPlus.api.recipe.GTPPRecipeMaps;
 
-public class ProgrammableHatchesRecipes implements IRecipePoll {
+public class ProgrammableHatchesRecipes {
 
-    @Override
-    public void loadRecipes() {
+    public static void loadRecipes() {
         if (ProgrammableHatches.isModLoaded() && enableProgrammableHatchesRecipes && enableMEInputRecipes) {
             // TODO
             final ItemStack PROGRAMMING_COVER = GTModHandler
