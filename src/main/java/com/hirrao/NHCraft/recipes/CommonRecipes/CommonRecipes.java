@@ -2,15 +2,12 @@ package com.hirrao.NHCraft.recipes.CommonRecipes;
 
 import static com.hirrao.NHCraft.config.CommonConfig.enableMEInputRecipes;
 
-import com.hirrao.NHCraft.recipes.IRecipePoll;
-
 import cpw.mods.fml.common.registry.GameRegistry;
 import gregtech.api.enums.ItemList;
 
-public class CommonRecipes implements IRecipePoll {
+public class CommonRecipes {
 
-    @Override
-    public void loadRecipes() {
+    public static void loadRecipes() {
         if (enableMEInputRecipes) {
             GameRegistry.addShapelessRecipe(
                 ItemList.Hatch_CraftingInput_Bus_ME.get(1),

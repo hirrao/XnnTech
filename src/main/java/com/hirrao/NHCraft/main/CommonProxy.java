@@ -23,6 +23,7 @@ public class CommonProxy {
         LOG.info("Starting with Version " + Tags.VERSION);
         try {
             ConfigurationManager.registerConfig(CommonConfig.class);
+            LOG.info("Registering Config");
         } catch (ConfigException e) {
             throw new RuntimeException(e);
         }
