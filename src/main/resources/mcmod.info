@@ -3,10 +3,10 @@
 	"modList": [{
 		"modid": "${modId}",
 		"name": "${modName}",
-		"description": "修改部分GT New Horizons的合成表",
+		"description": "奇思妙想版",
 		"version": "${modVersion}",
 		"mcversion": "${minecraftVersion}",
-		"url": "https://github.com/hirrao/NHCraft",
+		"url": "https://github.com/hirrao/XnnTech",
 		"updateUrl": "",
 		"authorList": ["hirrao"],
 		"credits": "",
