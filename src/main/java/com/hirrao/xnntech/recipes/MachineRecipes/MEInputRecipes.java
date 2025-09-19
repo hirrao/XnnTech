@@ -1,6 +1,6 @@
-package com.hirrao.NHCraft.recipes.MachineRecipes;
+package com.hirrao.xnntech.recipes.MachineRecipes;
 
-import static com.hirrao.NHCraft.config.CommonConfig.enableMEInputRecipes;
+import static com.hirrao.xnntech.config.CommonConfig.enableMEInputRecipes;
 import static gregtech.api.enums.Mods.AE2FluidCraft;
 import static gregtech.api.enums.Mods.AppliedEnergistics2;
 import static gregtech.api.util.GTRecipeBuilder.SECONDS;

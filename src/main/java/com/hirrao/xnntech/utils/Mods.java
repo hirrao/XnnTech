@@ -1,4 +1,4 @@
-package com.hirrao.NHCraft.utils;
+package com.hirrao.xnntech.utils;
 
 import cpw.mods.fml.common.Loader;
 

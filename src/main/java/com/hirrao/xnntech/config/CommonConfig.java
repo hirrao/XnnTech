@@ -1,10 +1,10 @@
-package com.hirrao.NHCraft.config;
+package com.hirrao.xnntech.config;
 
-import static com.hirrao.NHCraft.main.Info.MODID;
+import static com.hirrao.xnntech.main.Info.MODID;
 
 import com.gtnewhorizon.gtnhlib.config.Config;
 
-@Config(modid = MODID, filename = "NHCraft")
+@Config(modid = MODID, filename = "XnnTech")
 public class CommonConfig {
 
     @Config.Comment("是否启用ME输入相关配方修改")

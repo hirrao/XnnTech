@@ -1,12 +1,12 @@
-package com.hirrao.NHCraft.main;
+package com.hirrao.xnntech.main;
 
-import static com.hirrao.NHCraft.utils.Log.LOG;
+import static com.hirrao.xnntech.utils.Log.LOG;
 
 import com.gtnewhorizon.gtnhlib.config.ConfigException;
 import com.gtnewhorizon.gtnhlib.config.ConfigurationManager;
-import com.hirrao.NHCraft.Tags;
-import com.hirrao.NHCraft.config.CommonConfig;
-import com.hirrao.NHCraft.loader.RecipesLoader;
+import com.hirrao.xnntech.Tags;
+import com.hirrao.xnntech.config.CommonConfig;
+import com.hirrao.xnntech.loader.RecipesLoader;
 
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLLoadCompleteEvent;

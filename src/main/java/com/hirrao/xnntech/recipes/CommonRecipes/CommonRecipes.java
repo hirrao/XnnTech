@@ -1,6 +1,6 @@
-package com.hirrao.NHCraft.recipes.CommonRecipes;
+package com.hirrao.xnntech.recipes.CommonRecipes;
 
-import static com.hirrao.NHCraft.config.CommonConfig.enableMEInputRecipes;
+import static com.hirrao.xnntech.config.CommonConfig.enableMEInputRecipes;
 
 import cpw.mods.fml.common.registry.GameRegistry;
 import gregtech.api.enums.ItemList;

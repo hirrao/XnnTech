@@ -1,8 +1,8 @@
-package com.hirrao.NHCraft.main;
+package com.hirrao.xnntech.main;
 
-import static com.hirrao.NHCraft.main.Info.*;
+import static com.hirrao.xnntech.main.Info.*;
 
-import com.hirrao.NHCraft.Tags;
+import com.hirrao.xnntech.Tags;
 
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.SidedProxy;

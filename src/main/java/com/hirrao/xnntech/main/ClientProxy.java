@@ -1,5 +1,6 @@
-package com.hirrao.NHCraft.main;
+package com.hirrao.xnntech.main;
 
+@SuppressWarnings("unused")
 public class ClientProxy extends CommonProxy {
 
     // Override CommonProxy methods here, if you want a different behaviour on the client (e.g. registering renders).

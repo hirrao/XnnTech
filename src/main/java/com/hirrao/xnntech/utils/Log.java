@@ -1,6 +1,6 @@
-package com.hirrao.NHCraft.utils;
+package com.hirrao.xnntech.utils;
 
-import static com.hirrao.NHCraft.main.Info.NAME;
+import static com.hirrao.xnntech.main.Info.NAME;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
