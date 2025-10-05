@@ -6,7 +6,7 @@ import com.hirrao.xnntech.recipes.MachineRecipes.ProgrammableHatchesRecipes;
 
 public class RecipesLoader {
 
-    public static void loadRecipes() {
+    public static void load() {
         CommonRecipes.loadRecipes();
         MEInputRecipes.loadRecipes();
         ProgrammableHatchesRecipes.loadRecipes();
