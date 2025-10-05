@@ -1,4 +1,6 @@
-xnntech.gui.text.coke_oven.machine_type=Coke Oven
-xnntech.gui.text.coke_oven.info=Industrial Charcoal producer
-xnntech.gui.text.coke_oven.controller=Front Center
-xnntech.gui.text.coke_oven.casing_info=Pyrolyse Oven Casing
+xnntech.coke_oven.name=Coke Oven
+xnntech.coke_oven.gui.machine_type=Coke Oven
+xnntech.coke_oven.gui.info=Industrial Charcoal producer
+xnntech.coke_oven.gui.controller=Front Center
+xnntech.coke_oven.gui.casing_info=Pyrolyse Oven Casing
+

@@ -81,11 +81,11 @@ public class MTECokeOven extends MTEEnhancedMultiBlockBase<MTECokeOven> implemen
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
         final MultiblockTooltipBuilder tt = new MultiblockTooltipBuilder();
-        tt.addMachineType(translateToLocal("xnntech.gui.text.coke_oven.machine_type"))
-            .addInfo(translateToLocal("xnntech.gui.text.coke_oven.info"))
-            .addController(translateToLocal("xnntech.gui.text.coke_oven.controller"))
+        tt.addMachineType(translateToLocal("xnntech.coke_oven.gui.machine_type"))
+            .addInfo(translateToLocal("xnntech.coke_oven.gui.info"))
+            .addController(translateToLocal("xnntech.coke_oven.gui.controller"))
             .addDynamicSpeedInfo(0.5f, TooltipTier.COIL)
-            .addCasingInfoMin(translateToLocal("xnntech.gui.text.coke_oven.casing_info"), 8, false)
+            .addCasingInfoMin(translateToLocal("xnntech.coke_oven.gui.casing_info"), 8, false)
             .beginStructureBlock(3, 3, 4, true)
             .addPollutionAmount(getPollutionPerSecond(null))
             .toolTipFinisher();
