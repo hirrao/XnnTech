@@ -6,7 +6,6 @@ import static gregtech.api.enums.Textures.BlockIcons.*;
 import static gregtech.api.util.GTStructureUtility.*;
 import static net.minecraft.util.StatCollector.translateToLocal;
 
-import gregtech.api.util.tooltip.TooltipTier;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.util.ForgeDirection;
 
@@ -28,6 +27,7 @@ import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.RecipeMaps;
 import gregtech.api.render.TextureFactory;
 import gregtech.api.util.MultiblockTooltipBuilder;
+import gregtech.api.util.tooltip.TooltipTier;
 import gregtech.common.tileentities.machines.multi.MTEPyrolyseOven;
 
 public class MTECokeOven extends MTEEnhancedMultiBlockBase<MTECokeOven> implements ISurvivalConstructable {
@@ -35,20 +35,21 @@ public class MTECokeOven extends MTEEnhancedMultiBlockBase<MTECokeOven> implemen
     private HeatingCoilLevel coilHeat;
     private static final int CASING_INDEX = 1090;
     private int mCasingAmount = 0;
+    private static final int mPollutionPerSecond = 300;
 
     private static final IStructureDefinition<MTECokeOven> STRUCTURE_DEFINITION = StructureDefinition
         .<MTECokeOven>builder()
         .addShape(
             "main",
             transpose(
-                new String[][] { { "ttt", "ccc", "ccc", "ttt" }, { "t~t", "c-c", "c-c", "cmc" },
-                    { "ttt", "ccc", "ccc", "ttt" }, }))
+                new String[][] { { "ttt", "ccc", "ccc", "ttt" }, { "t~t", "c-c", "c-c", "tmt" },
+                    { "ttt", "ccc", "ccc", "ttt" } }))
         .addElement('m', Muffler.newAny(CASING_INDEX, 2))
         .addElement('c', activeCoils(ofCoil(MTECokeOven::setCoilLevel, MTECokeOven::getCoilLevel)))
         .addElement(
             't',
-            buildHatchAdder(MTECokeOven.class).atLeast(InputBus, InputHatch, Energy)
-                .atLeast(OutputBus, OutputHatch)
+            buildHatchAdder(MTECokeOven.class)
+                .atLeast(InputBus, InputHatch, OutputBus, OutputHatch, Energy, Maintenance)
                 .casingIndex(CASING_INDEX)
                 .dot(1)
                 .buildAndChain(onElementPass(MTECokeOven::onCasingAdded, ofBlock(GregTechAPI.sBlockCasingsNH, 2))))
@@ -64,7 +65,7 @@ public class MTECokeOven extends MTEEnhancedMultiBlockBase<MTECokeOven> implemen
 
     @Override
     public void construct(ItemStack stackSize, boolean hintsOnly) {
-        buildPiece("main", stackSize, hintsOnly, 1, 3, 0);
+        buildPiece("main", stackSize, hintsOnly, 1, 1, 0);
     }
 
     @Override
@@ -81,11 +82,13 @@ public class MTECokeOven extends MTEEnhancedMultiBlockBase<MTECokeOven> implemen
     protected MultiblockTooltipBuilder createTooltip() {
         final MultiblockTooltipBuilder tt = new MultiblockTooltipBuilder();
         tt.addMachineType(translateToLocal("xnntech.gui.text.coke_oven.machine_type"))
-             .addInfo(translateToLocal("xnntech.gui.text.coke_oven.info"))
-             .addController(translateToLocal("xnntech.gui.text.coke_oven.controller"))
-             .addDynamicSpeedInfo(0.5f, TooltipTier.COIL)
-             .beginStructureBlock(3, 3, 4, true)
-             .toolTipFinisher();
+            .addInfo(translateToLocal("xnntech.gui.text.coke_oven.info"))
+            .addController(translateToLocal("xnntech.gui.text.coke_oven.controller"))
+            .addDynamicSpeedInfo(0.5f, TooltipTier.COIL)
+            .addCasingInfoMin(translateToLocal("xnntech.gui.text.coke_oven.casing_info"), 8, false)
+            .beginStructureBlock(3, 3, 4, true)
+            .addPollutionAmount(getPollutionPerSecond(null))
+            .toolTipFinisher();
         return tt;
     }
 
@@ -93,7 +96,7 @@ public class MTECokeOven extends MTEEnhancedMultiBlockBase<MTECokeOven> implemen
     public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
         coilHeat = HeatingCoilLevel.None;
         mCasingAmount = 0;
-        return checkPiece("main", 2, 3, 0) && mCasingAmount > 10
+        return checkPiece("main", 1, 1, 0) && mCasingAmount >= 8
             && mMaintenanceHatches.size() == 1
             && !mMufflerHatches.isEmpty();
     }
@@ -145,6 +148,11 @@ public class MTECokeOven extends MTEEnhancedMultiBlockBase<MTECokeOven> implemen
 
     private void onCasingAdded() {
         mCasingAmount++;
+    }
+
+    @Override
+    public int getPollutionPerSecond(ItemStack aStack) {
+        return mPollutionPerSecond;
     }
 
     @SideOnly(Side.CLIENT)
