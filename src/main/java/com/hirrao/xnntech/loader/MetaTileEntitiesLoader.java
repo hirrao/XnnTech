@@ -5,13 +5,13 @@ import static com.hirrao.xnntech.utils.Log.LOG;
 
 import net.minecraft.util.StatCollector;
 
-import com.hirrao.xnntech.api.enums.ItemList;
+import com.hirrao.xnntech.api.enums.ItemLists;
 import com.hirrao.xnntech.common.machines.MTECokeOven;
 
 public class MetaTileEntitiesLoader {
 
     private static void registerMultiblockControllers() {
-        ItemList.CokeOven.set(
+        ItemLists.CokeOven.set(
             new MTECokeOven(
                 COKE_OVEN_CONTROLLER.ID,
                 "cokeoven",
