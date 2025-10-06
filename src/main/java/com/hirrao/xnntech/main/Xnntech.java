@@ -18,7 +18,7 @@ import cpw.mods.fml.common.event.FMLServerStartingEvent;
     name = NAME,
     acceptedMinecraftVersions = "[1.7.10]",
     dependencies = DEPENDENCIES)
-public class NHCraft {
+public class Xnntech {
 
     @SidedProxy(clientSide = CLIENT_SIDE, serverSide = SERVER_SIDE)
     public static CommonProxy proxy;
