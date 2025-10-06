@@ -4,13 +4,16 @@ import static com.gtnewhorizon.structurelib.structure.StructureUtility.*;
 import static gregtech.api.enums.HatchElement.*;
 import static gregtech.api.enums.Textures.BlockIcons.*;
 import static gregtech.api.util.GTStructureUtility.*;
-import static net.minecraft.util.StatCollector.translateToLocal;
 
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.StatCollector;
 import net.minecraftforge.common.util.ForgeDirection;
+
+import org.jetbrains.annotations.NotNull;
 
 import com.gtnewhorizon.structurelib.alignment.constructable.ISurvivalConstructable;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
+import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
 
 import cpw.mods.fml.relauncher.Side;
@@ -22,9 +25,11 @@ import gregtech.api.enums.Textures;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
+import gregtech.api.logic.ProcessingLogic;
 import gregtech.api.metatileentity.implementations.MTEEnhancedMultiBlockBase;
 import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.RecipeMaps;
+import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.render.TextureFactory;
 import gregtech.api.util.MultiblockTooltipBuilder;
 import gregtech.api.util.tooltip.TooltipTier;
@@ -69,6 +74,12 @@ public class MTECokeOven extends MTEEnhancedMultiBlockBase<MTECokeOven> implemen
     }
 
     @Override
+    public int survivalConstruct(ItemStack stackSize, int elementBudget, ISurvivalBuildEnvironment env) {
+        if (mMachine) return -1;
+        return survivalBuildPiece("main", stackSize, 1, 1, 0, elementBudget, env, false, true);
+    }
+
+    @Override
     public RecipeMap<?> getRecipeMap() {
         return RecipeMaps.pyrolyseRecipes;
     }
@@ -81,11 +92,11 @@ public class MTECokeOven extends MTEEnhancedMultiBlockBase<MTECokeOven> implemen
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
         final MultiblockTooltipBuilder tt = new MultiblockTooltipBuilder();
-        tt.addMachineType(translateToLocal("xnntech.coke_oven.gui.machine_type"))
-            .addInfo(translateToLocal("xnntech.coke_oven.gui.info"))
-            .addController(translateToLocal("xnntech.coke_oven.gui.controller"))
+        tt.addMachineType(StatCollector.translateToLocal("xnntech.coke_oven.gui.machine_type"))
+            .addInfo(StatCollector.translateToLocal("xnntech.coke_oven.gui.info"))
+            .addController(StatCollector.translateToLocal("xnntech.coke_oven.gui.controller"))
             .addDynamicSpeedInfo(0.5f, TooltipTier.COIL)
-            .addCasingInfoMin(translateToLocal("xnntech.coke_oven.gui.casing_info"), 8, false)
+            .addCasingInfoMin(StatCollector.translateToLocal("xnntech.coke_oven.gui.casing_info"), 8, false)
             .beginStructureBlock(3, 3, 4, true)
             .addPollutionAmount(getPollutionPerSecond(null))
             .toolTipFinisher();
@@ -104,6 +115,19 @@ public class MTECokeOven extends MTEEnhancedMultiBlockBase<MTECokeOven> implemen
     @Override
     public IMetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
         return new MTECokeOven(this.mName);
+    }
+
+    @Override
+    protected ProcessingLogic createProcessingLogic() {
+        return new ProcessingLogic() {
+
+            @NotNull
+            @Override
+            public CheckRecipeResult process() {
+                setSpeedBonus(2f / (1 + coilHeat.getTier()));
+                return super.process();
+            }
+        };
     }
 
     /**
@@ -153,6 +177,26 @@ public class MTECokeOven extends MTEEnhancedMultiBlockBase<MTECokeOven> implemen
     @Override
     public int getPollutionPerSecond(ItemStack aStack) {
         return mPollutionPerSecond;
+    }
+
+    @Override
+    public boolean supportsVoidProtection() {
+        return true;
+    }
+
+    @Override
+    public boolean supportsInputSeparation() {
+        return true;
+    }
+
+    @Override
+    public boolean supportsBatchMode() {
+        return true;
+    }
+
+    @Override
+    public boolean supportsSingleRecipeLocking() {
+        return true;
     }
 
     @SideOnly(Side.CLIENT)
