@@ -56,7 +56,7 @@ public class MTECokeOven extends MTEExtendedPowerMultiBlockBase<MTECokeOven> imp
                 .dot(1)
                 .buildAndChain(onElementPass(MTECokeOven::onCasingAdded, ofBlock(GregTechAPI.sBlockCasingsNH, 2))))
         .build();
-    private HeatingCoilLevel coilHeat;
+    private HeatingCoilLevel coilHeat = HeatingCoilLevel.None;
     private int mCasingAmount = 0;
 
     public MTECokeOven(int aID, String aName, String aNameRegional) {
@@ -93,7 +93,7 @@ public class MTECokeOven extends MTEExtendedPowerMultiBlockBase<MTECokeOven> imp
         final MultiblockTooltipBuilder tt = new MultiblockTooltipBuilder();
         tt.addMachineType(StatCollector.translateToLocal("xnntech.coke_oven.gui.machine_type"))
             .addInfo(StatCollector.translateToLocal("xnntech.coke_oven.gui.info"))
-            .addController(StatCollector.translateToLocal("xnntech.coke_oven.gui.controller"))
+            .addController(StatCollector.translateToLocal("xnntech.gui.front_center"))
             .addDynamicSpeedInfo(0.5f, TooltipTier.COIL)
             .addCasingInfoMin(StatCollector.translateToLocal("xnntech.coke_oven.gui.casing_info"), 8, false)
             .beginStructureBlock(3, 3, 4, true)

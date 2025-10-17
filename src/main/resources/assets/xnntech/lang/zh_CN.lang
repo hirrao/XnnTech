@@ -1,6 +1,8 @@
+xnntech.gui.front_center=正面中心
 xnntech.coke_oven.name=热解炉
 xnntech.coke_oven.gui.machine_type=热解炉
 xnntech.coke_oven.gui.info=木炭制造机
-xnntech.coke_oven.gui.controller=正面中心
 xnntech.coke_oven.gui.casing_info=热解炉机械方块
-
+xnntech,multi_fluid_solidifier.name=工业流体固化机
+xnntech.multi_fluid_solidifier.gui.machine_type=固化机
+xnntech.multi_fluid_solidifier.gui.info=小就是好!

@@ -1,6 +1,10 @@
+xnntech.gui.front_center=Front Center
 xnntech.coke_oven.name=Coke Oven
 xnntech.coke_oven.gui.machine_type=Coke Oven
 xnntech.coke_oven.gui.info=Industrial Charcoal producer
-xnntech.coke_oven.gui.controller=Front Center
 xnntech.coke_oven.gui.casing_info=Pyrolyse Oven Casing
+xnntech,multi_fluid_solidifier.name=Multi Fluid Solidifier
+xnntech.multi_fluid_solidifier.gui.machine_type=Fluid Solidifier
+xnntech.multi_fluid_solidifier.gui.info=Smaller is Best!
+
 

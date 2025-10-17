@@ -9,7 +9,8 @@ import gregtech.api.util.GTUtility;
 
 public enum ItemLists {
 
-    CokeOven;
+    CokeOven,
+    MultiFluidSolidifier;
 
     private ItemStack mStack;
     private boolean mHasNotBeenSet;
