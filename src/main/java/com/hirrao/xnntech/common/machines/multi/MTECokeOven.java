@@ -37,11 +37,8 @@ import gregtech.common.tileentities.machines.multi.MTEPyrolyseOven;
 
 public class MTECokeOven extends MTEExtendedPowerMultiBlockBase<MTECokeOven> implements ISurvivalConstructable {
 
-    private HeatingCoilLevel coilHeat;
     private static final int CASING_INDEX = 1090;
-    private int mCasingAmount = 0;
     private static final int mPollutionPerSecond = 300;
-
     private static final IStructureDefinition<MTECokeOven> STRUCTURE_DEFINITION = StructureDefinition
         .<MTECokeOven>builder()
         .addShape(
@@ -59,6 +56,8 @@ public class MTECokeOven extends MTEExtendedPowerMultiBlockBase<MTECokeOven> imp
                 .dot(1)
                 .buildAndChain(onElementPass(MTECokeOven::onCasingAdded, ofBlock(GregTechAPI.sBlockCasingsNH, 2))))
         .build();
+    private HeatingCoilLevel coilHeat;
+    private int mCasingAmount = 0;
 
     public MTECokeOven(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
@@ -131,9 +130,7 @@ public class MTECokeOven extends MTEExtendedPowerMultiBlockBase<MTECokeOven> imp
     }
 
     /**
-     *
-     * Now Copy From {@link MTEPyrolyseOven}
-     *
+     * Now Copy From {@link MTEPyrolyseOven#getTexture}
      */
     @Override
     public ITexture[] getTexture(IGregTechTileEntity baseMetaTileEntity, ForgeDirection sideDirection,
