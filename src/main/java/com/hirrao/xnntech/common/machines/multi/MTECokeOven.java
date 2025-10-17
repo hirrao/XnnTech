@@ -1,4 +1,4 @@
-package com.hirrao.xnntech.common.machines;
+package com.hirrao.xnntech.common.machines.multi;
 
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.*;
 import static gregtech.api.enums.HatchElement.*;

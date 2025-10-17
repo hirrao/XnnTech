@@ -6,7 +6,7 @@ import static com.hirrao.xnntech.utils.Log.LOG;
 import net.minecraft.util.StatCollector;
 
 import com.hirrao.xnntech.api.enums.ItemLists;
-import com.hirrao.xnntech.common.machines.MTECokeOven;
+import com.hirrao.xnntech.common.machines.multi.MTECokeOven;
 
 public class MetaTileEntitiesLoader {
 
