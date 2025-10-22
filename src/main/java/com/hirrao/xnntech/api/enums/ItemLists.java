@@ -1,6 +1,5 @@
 package com.hirrao.xnntech.api.enums;
 
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
 import gregtech.api.enums.ItemList;
@@ -15,18 +14,9 @@ public enum ItemLists {
     private ItemStack mStack;
     private boolean mHasNotBeenSet;
 
-    public ItemLists set(Item aItem) {
-        mHasNotBeenSet = false;
-        if (aItem == null) return this;
-        ItemStack aStack = new ItemStack(aItem, 1, 0);
-        mStack = GTUtility.copyAmount(1, aStack);
-        return this;
-    }
-
-    public ItemLists set(ItemStack aStack) {
+    public void set(ItemStack aStack) {
         mHasNotBeenSet = false;
         mStack = GTUtility.copyAmount(1, aStack);
-        return this;
     }
 
     public ItemStack get(int aAmount) {

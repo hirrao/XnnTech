@@ -15,8 +15,6 @@ import gregtech.api.util.GTUtility;
 public class MEInputRecipes {
 
     public static final ItemStack FLUID_INTERFACE = GTModHandler.getModItem(AE2FluidCraft.ID, "fluid_interface", 1);
-    public static final ItemStack PART_FLUID_INTERFACE = GTModHandler
-        .getModItem(AE2FluidCraft.ID, "part_fluid_interface", 1);
     public static final ItemStack ACCELERATION_CARD_4 = GTModHandler
         .getModItem(AppliedEnergistics2.ID, "item.ItemMultiMaterial", 4, 30);
     public static final ItemStack WIRELESS_KIT_2 = GTModHandler.getModItem(AE2Stuff.ID, "Wireless", 2);
@@ -28,16 +26,6 @@ public class MEInputRecipes {
                     GTUtility.getIntegratedCircuit(1),
                     ItemList.Hatch_Input_HV.get(1),
                     FLUID_INTERFACE,
-                    ACCELERATION_CARD_4)
-                .itemOutputs(ItemList.Hatch_Input_ME.get(1))
-                .duration(15 * SECONDS)
-                .eut(480)
-                .addTo(RecipeMaps.assemblerRecipes);
-            GTValues.RA.stdBuilder()
-                .itemInputs(
-                    GTUtility.getIntegratedCircuit(1),
-                    ItemList.Hatch_Input_HV.get(1),
-                    PART_FLUID_INTERFACE,
                     ACCELERATION_CARD_4)
                 .itemOutputs(ItemList.Hatch_Input_ME.get(1))
                 .duration(15 * SECONDS)
