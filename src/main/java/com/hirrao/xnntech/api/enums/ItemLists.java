@@ -1,5 +1,7 @@
 package com.hirrao.xnntech.api.enums;
 
+import static com.hirrao.xnntech.utils.Log.LOG;
+
 import net.minecraft.item.ItemStack;
 
 import gregtech.api.enums.ItemList;
@@ -22,7 +24,7 @@ public enum ItemLists {
     public ItemStack get(int aAmount) {
         sanityCheck();
         if (GTUtility.isStackInvalid(mStack)) {
-            GTLog.out.println("Object in the ItemList is null at:");
+            LOG.info("Object in the ItemList is null at:");
             new NullPointerException().printStackTrace(GTLog.out);
             return GTUtility.copyAmount(aAmount, ItemList.AcceleratorLV.get(1));
         }
