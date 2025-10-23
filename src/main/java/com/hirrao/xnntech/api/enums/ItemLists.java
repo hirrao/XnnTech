@@ -5,7 +5,6 @@ import static com.hirrao.xnntech.utils.Log.LOG;
 import net.minecraft.item.ItemStack;
 
 import gregtech.api.enums.ItemList;
-import gregtech.api.util.GTLog;
 import gregtech.api.util.GTUtility;
 
 public enum ItemLists {
@@ -24,8 +23,7 @@ public enum ItemLists {
     public ItemStack get(int aAmount) {
         sanityCheck();
         if (GTUtility.isStackInvalid(mStack)) {
-            LOG.info("Object in the ItemList is null at:");
-            new NullPointerException().printStackTrace(GTLog.out);
+            LOG.error("Object in the ItemList is null, {}",this.name());
             return GTUtility.copyAmount(aAmount, ItemList.AcceleratorLV.get(1));
         }
         return GTUtility.copyAmount(aAmount, mStack);
