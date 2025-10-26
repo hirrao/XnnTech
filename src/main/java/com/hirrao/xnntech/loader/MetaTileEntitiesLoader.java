@@ -1,13 +1,14 @@
 package com.hirrao.xnntech.loader;
 
-import static com.hirrao.xnntech.api.enums.MetaTileEntityIDs.*;
-import static com.hirrao.xnntech.utils.Log.LOG;
+import static com.hirrao.xnntech.api.enums.MetaTileEntityIDs.COKE_OVEN_CONTROLLER;
+import static com.hirrao.xnntech.api.enums.MetaTileEntityIDs.MULTI_FLUID_SOLIDIFIER_CONTROLLER;
 
 import net.minecraft.util.StatCollector;
 
 import com.hirrao.xnntech.api.enums.ItemLists;
 import com.hirrao.xnntech.common.machines.multi.MTECokeOven;
 import com.hirrao.xnntech.common.machines.multi.MTEMultiFluidSolidifier;
+import com.hirrao.xnntech.utils.Log;
 
 public class MetaTileEntitiesLoader {
 
@@ -25,7 +26,7 @@ public class MetaTileEntitiesLoader {
     }
 
     public static void load() {
-        LOG.info("Loading MetaTileEntities");
+        Log.info("Loading MetaTileEntities");
         registerMultiblockControllers();
     }
 }

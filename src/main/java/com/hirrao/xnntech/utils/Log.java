@@ -7,5 +7,17 @@ import org.apache.logging.log4j.Logger;
 
 public final class Log {
 
-    public static final Logger LOG = LogManager.getLogger(NAME);
+    private static final Logger LOG = LogManager.getLogger(NAME);
+
+    public static void error(String s, Object... objects) {
+        LOG.error(s, objects);
+    }
+
+    public static void info(String s, Object... objects) {
+        LOG.info(s, objects);
+    }
+
+    public static void warn(String s, Object... objects) {
+        LOG.warn(s, objects);
+    }
 }
