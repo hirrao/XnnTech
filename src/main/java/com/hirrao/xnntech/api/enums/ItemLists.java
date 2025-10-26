@@ -23,7 +23,7 @@ public enum ItemLists {
     public ItemStack get(int aAmount) {
         sanityCheck();
         if (GTUtility.isStackInvalid(mStack)) {
-            LOG.error("Object in the ItemList is null, {}",this.name());
+            LOG.error("Object in the ItemList is null, {}", this.name());
             return GTUtility.copyAmount(aAmount, ItemList.AcceleratorLV.get(1));
         }
         return GTUtility.copyAmount(aAmount, mStack);

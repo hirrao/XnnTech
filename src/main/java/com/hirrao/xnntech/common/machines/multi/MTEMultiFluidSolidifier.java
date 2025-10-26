@@ -2,16 +2,13 @@ package com.hirrao.xnntech.common.machines.multi;
 
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.*;
 import static gregtech.api.enums.HatchElement.*;
-import static gregtech.api.enums.HatchElement.Energy;
-import static gregtech.api.enums.HatchElement.Maintenance;
 import static gregtech.api.enums.Textures.BlockIcons.*;
 import static gregtech.api.util.GTStructureUtility.buildHatchAdder;
+import static gregtech.api.util.tooltip.TooltipTier.VOLTAGE;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.StatCollector;
 import net.minecraftforge.common.util.ForgeDirection;
-
-import org.jetbrains.annotations.NotNull;
 
 import com.gtnewhorizon.structurelib.alignment.constructable.ISurvivalConstructable;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
@@ -27,7 +24,6 @@ import gregtech.api.logic.ProcessingLogic;
 import gregtech.api.metatileentity.implementations.MTEExtendedPowerMultiBlockBase;
 import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.RecipeMaps;
-import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.render.TextureFactory;
 import gregtech.api.util.GTUtility;
 import gregtech.api.util.MultiblockTooltipBuilder;
@@ -90,6 +86,7 @@ public class MTEMultiFluidSolidifier extends MTEExtendedPowerMultiBlockBase<MTEM
         tt.addMachineType(StatCollector.translateToLocal("xnntech.multi_fluid_solidifier.gui.machine_type"))
             .addInfo(StatCollector.translateToLocal("xnntech.multi_fluid_solidifier.gui.info"))
             .addStaticSpeedInfo(2.0f)
+            .addDynamicParallelInfo(4, VOLTAGE)
             .addController(StatCollector.translateToLocal("xnntech.gui.front_center"))
             .beginStructureBlock(5, 3, 3, true)
             .toolTipFinisher();
@@ -103,16 +100,13 @@ public class MTEMultiFluidSolidifier extends MTEExtendedPowerMultiBlockBase<MTEM
 
     @Override
     protected ProcessingLogic createProcessingLogic() {
-        return new ProcessingLogic() {
+        return new ProcessingLogic().setSpeedBonus(1f / 2f)
+            .setMaxParallelSupplier(this::getTrueParallel);
+    }
 
-            @NotNull
-            @Override
-            public CheckRecipeResult process() {
-                setSpeedBonus(0.5);
-                setMaxParallel(16);
-                return super.process();
-            }
-        };
+    @Override
+    public int getMaxParallelRecipes() {
+        return (4 * GTUtility.getTier(this.getMaxInputVoltage()));
     }
 
     @Override
