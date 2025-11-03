@@ -1,19 +1,22 @@
-package com.hirrao.xnntech.config;
+package com.hirrao.xnntech.config
 
-import static com.hirrao.xnntech.main.Info.MODID;
-
-import com.gtnewhorizon.gtnhlib.config.Config;
+import com.gtnewhorizon.gtnhlib.config.Config
+import com.gtnewhorizon.gtnhlib.config.Config.DefaultBoolean
+import com.gtnewhorizon.gtnhlib.config.Config.RequiresMcRestart
+import com.hirrao.xnntech.main.Info.MODID
 
 @Config(modid = MODID, filename = "XnnTech")
-public class CommonConfig {
+class CommonConfig {
+    companion object{
+        @Config.Comment("是否启用ME输入相关配方修改")
+        @DefaultBoolean(true)
+        @RequiresMcRestart
+        var enableMEInputRecipes: Boolean = false
 
-    @Config.Comment("是否启用ME输入相关配方修改")
-    @Config.DefaultBoolean(true)
-    @Config.RequiresMcRestart
-    public static boolean enableMEInputRecipes;
+        @Config.Comment("是否启用可编程仓室总成修改(需打开ME输入修改)")
+        @DefaultBoolean(false)
+        @RequiresMcRestart
+        var enableProgrammableHatchesRecipes: Boolean = false
+    }
 
-    @Config.Comment("是否启用可编程仓室总成修改(需打开ME输入修改)")
-    @Config.DefaultBoolean(false)
-    @Config.RequiresMcRestart
-    public static boolean enableProgrammableHatchesRecipes;
 }

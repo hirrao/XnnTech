@@ -1,23 +1,18 @@
-package com.hirrao.xnntech.utils;
+package com.hirrao.xnntech.utils
 
-import static com.hirrao.xnntech.main.Info.NAME;
+import com.hirrao.xnntech.main.Info.NAME
+import org.apache.logging.log4j.LogManager
+import org.apache.logging.log4j.Logger
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+object Log {
+    private val LOG: Logger = LogManager.getLogger(NAME)
 
-public final class Log {
+    fun error(s: String, vararg objects: Any?) = LOG.error(s, *objects)
 
-    private static final Logger LOG = LogManager.getLogger(NAME);
 
-    public static void error(String s, Object... objects) {
-        LOG.error(s, objects);
-    }
+    fun info(s: String, vararg objects: Any?) = LOG.info(s, *objects)
 
-    public static void info(String s, Object... objects) {
-        LOG.info(s, objects);
-    }
 
-    public static void warn(String s, Object... objects) {
-        LOG.warn(s, objects);
-    }
+    fun warn(s: String, vararg objects: Any?) = LOG.warn(s, *objects)
+
 }

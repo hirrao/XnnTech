@@ -1,32 +1,30 @@
-package com.hirrao.xnntech.loader;
+package com.hirrao.xnntech.loader
 
-import static com.hirrao.xnntech.api.enums.MetaTileEntityIDs.COKE_OVEN_CONTROLLER;
-import static com.hirrao.xnntech.api.enums.MetaTileEntityIDs.MULTI_FLUID_SOLIDIFIER_CONTROLLER;
+import com.hirrao.xnntech.api.enums.ItemLists
+import com.hirrao.xnntech.api.enums.MetaTileEntityIDs
+import com.hirrao.xnntech.common.machines.multi.MTECokeOven
+import com.hirrao.xnntech.common.machines.multi.MTEMultiFluidSolidifier
+import com.hirrao.xnntech.utils.Log
+import net.minecraft.util.StatCollector
 
-import net.minecraft.util.StatCollector;
+private fun registerMultiblockControllers() {
+    ItemLists.CokeOven.set(
+        MTECokeOven(
+            MetaTileEntityIDs.COKE_OVEN_CONTROLLER.id,
+            "cokeoven",
+            StatCollector.translateToLocal("xnntech.coke_oven.name")
+        ).getStackForm(1L)
+    )
+    ItemLists.MultiFluidSolidifier.set(
+        MTEMultiFluidSolidifier(
+            MetaTileEntityIDs.MULTI_FLUID_SOLIDIFIER_CONTROLLER.id,
+            "multifluidsolidifier",
+            StatCollector.translateToLocal("xnntech,multi_fluid_solidifier.name")
+        ).getStackForm(1L)
+    )
+}
 
-import com.hirrao.xnntech.api.enums.ItemLists;
-import com.hirrao.xnntech.common.machines.multi.MTECokeOven;
-import com.hirrao.xnntech.common.machines.multi.MTEMultiFluidSolidifier;
-import com.hirrao.xnntech.utils.Log;
-
-public class MetaTileEntitiesLoader {
-
-    private static void registerMultiblockControllers() {
-        ItemLists.CokeOven.set(
-            new MTECokeOven(
-                COKE_OVEN_CONTROLLER.ID,
-                "cokeoven",
-                StatCollector.translateToLocal("xnntech.coke_oven.name")).getStackForm(1L));
-        ItemLists.MultiFluidSolidifier.set(
-            new MTEMultiFluidSolidifier(
-                MULTI_FLUID_SOLIDIFIER_CONTROLLER.ID,
-                "multifluidsolidifier",
-                StatCollector.translateToLocal("xnntech,multi_fluid_solidifier.name")).getStackForm(1L));
-    }
-
-    public static void load() {
-        Log.info("Loading MetaTileEntities");
-        registerMultiblockControllers();
-    }
+fun loadMetaTileEntities() {
+    Log.info("Loading MetaTileEntities")
+    registerMultiblockControllers()
 }

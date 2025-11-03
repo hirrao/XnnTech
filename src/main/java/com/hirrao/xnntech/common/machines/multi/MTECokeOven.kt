@@ -1,204 +1,162 @@
-package com.hirrao.xnntech.common.machines.multi;
+package com.hirrao.xnntech.common.machines.multi
 
-import static com.gtnewhorizon.structurelib.structure.StructureUtility.*;
-import static gregtech.api.enums.HatchElement.*;
-import static gregtech.api.enums.Textures.BlockIcons.*;
-import static gregtech.api.util.GTStructureUtility.*;
+import com.gtnewhorizon.structurelib.alignment.constructable.ISurvivalConstructable
+import com.gtnewhorizon.structurelib.structure.IStructureDefinition
+import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment
+import com.gtnewhorizon.structurelib.structure.StructureDefinition
+import com.gtnewhorizon.structurelib.structure.StructureUtility.*
+import com.hirrao.xnntech.utils.addAllHatchesNormal
+import com.hirrao.xnntech.utils.addMufflerHatchNormal
+import cpw.mods.fml.relauncher.Side
+import cpw.mods.fml.relauncher.SideOnly
+import gregtech.api.GregTechAPI
+import gregtech.api.enums.HatchElement
+import gregtech.api.enums.HeatingCoilLevel
+import gregtech.api.enums.SoundResource
+import gregtech.api.enums.Textures
+import gregtech.api.interfaces.ITexture
+import gregtech.api.interfaces.tileentity.IGregTechTileEntity
+import gregtech.api.logic.ProcessingLogic
+import gregtech.api.metatileentity.implementations.MTEExtendedPowerMultiBlockBase
+import gregtech.api.recipe.RecipeMap
+import gregtech.api.recipe.RecipeMaps
+import gregtech.api.recipe.check.CheckRecipeResult
+import gregtech.api.render.TextureFactory
+import gregtech.api.util.GTStructureUtility.*
+import gregtech.api.util.MultiblockTooltipBuilder
+import gregtech.api.util.tooltip.TooltipTier
+import net.minecraft.item.ItemStack
+import net.minecraft.util.StatCollector
+import net.minecraftforge.common.util.ForgeDirection
+import java.util.function.BiConsumer
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.StatCollector;
-import net.minecraftforge.common.util.ForgeDirection;
-
-import org.jetbrains.annotations.NotNull;
-
-import com.gtnewhorizon.structurelib.alignment.constructable.ISurvivalConstructable;
-import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
-import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
-import com.gtnewhorizon.structurelib.structure.StructureDefinition;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import gregtech.api.GregTechAPI;
-import gregtech.api.enums.HeatingCoilLevel;
-import gregtech.api.enums.SoundResource;
-import gregtech.api.enums.Textures;
-import gregtech.api.interfaces.ITexture;
-import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
-import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
-import gregtech.api.logic.ProcessingLogic;
-import gregtech.api.metatileentity.implementations.MTEExtendedPowerMultiBlockBase;
-import gregtech.api.recipe.RecipeMap;
-import gregtech.api.recipe.RecipeMaps;
-import gregtech.api.recipe.check.CheckRecipeResult;
-import gregtech.api.render.TextureFactory;
-import gregtech.api.util.MultiblockTooltipBuilder;
-import gregtech.api.util.tooltip.TooltipTier;
-import gregtech.common.tileentities.machines.multi.MTEPyrolyseOven;
-
-public class MTECokeOven extends MTEExtendedPowerMultiBlockBase<MTECokeOven> implements ISurvivalConstructable {
-
-    private static final int CASING_INDEX = 1090;
-    private static final int mPollutionPerSecond = 300;
-    private static final IStructureDefinition<MTECokeOven> STRUCTURE_DEFINITION = StructureDefinition
-        .<MTECokeOven>builder()
-        .addShape(
-            "main",
-            transpose(
-                new String[][] { { "ttt", "ccc", "ccc", "ttt" }, { "t~t", "c-c", "c-c", "tmt" },
-                    { "ttt", "ccc", "ccc", "ttt" } }))
-        .addElement('m', Muffler.newAny(CASING_INDEX, 2))
-        .addElement('c', activeCoils(ofCoil(MTECokeOven::setCoilLevel, MTECokeOven::getCoilLevel)))
-        .addElement(
-            't',
-            buildHatchAdder(MTECokeOven.class)
-                .atLeast(InputBus, InputHatch, OutputBus, OutputHatch, Energy, Maintenance)
-                .casingIndex(CASING_INDEX)
-                .dot(1)
-                .buildAndChain(onElementPass(MTECokeOven::onCasingAdded, ofBlock(GregTechAPI.sBlockCasingsNH, 2))))
-        .build();
-    private HeatingCoilLevel coilHeat = HeatingCoilLevel.None;
-    private int mCasingAmount = 0;
-
-    public MTECokeOven(int aID, String aName, String aNameRegional) {
-        super(aID, aName, aNameRegional);
+class MTECokeOven : MTEExtendedPowerMultiBlockBase<MTECokeOven>, ISurvivalConstructable {
+    companion object {
+        private const val CASING_INDEX = 1090
+        private val STRUCTURE_DEFINITION: IStructureDefinition<MTECokeOven> =
+            StructureDefinition.builder<MTECokeOven>().addShape(
+                "main", transpose(
+                    arrayOf(
+                        arrayOf("ttt", "ccc", "ccc", "ttt"),
+                        arrayOf("t~t", "c-c", "c-c", "tmt"),
+                        arrayOf("ttt", "ccc", "ccc", "ttt")
+                    )
+                )
+            ).addElement('m', HatchElement.Muffler.newAny(CASING_INDEX, 2)).addElement(
+                'c', activeCoils(ofCoil(BiConsumer { obj: MTECokeOven, aCoilLevel: HeatingCoilLevel ->
+                    obj.coilLevel = aCoilLevel
+                }) { obj -> obj.coilLevel })
+            ).addElement(
+                't', buildHatchAdder(MTECokeOven::class.java).atLeast(
+                    HatchElement.InputBus,
+                    HatchElement.InputHatch,
+                    HatchElement.OutputBus,
+                    HatchElement.OutputHatch,
+                    HatchElement.Energy,
+                    HatchElement.Maintenance
+                ).casingIndex(CASING_INDEX).dot(1).buildAndChain(
+                    onElementPass(
+                        { obj -> obj.onCasingAdded() }, ofBlock(GregTechAPI.sBlockCasingsNH, 2)
+                    )
+                )
+            ).build()
     }
 
-    public MTECokeOven(String aName) {
-        super(aName);
+    private val mPollutionPerSecond = 300
+    private var coilLevel: HeatingCoilLevel = HeatingCoilLevel.None
+    private var mCasingAmount = 0
+
+    constructor(aID: Int, aName: String, aNameRegional: String) : super(aID, aName, aNameRegional)
+
+    constructor(aName: String) : super(aName)
+
+    override fun construct(stackSize: ItemStack, hintsOnly: Boolean) {
+        buildPiece("main", stackSize, hintsOnly, 1, 1, 0)
     }
 
-    @Override
-    public void construct(ItemStack stackSize, boolean hintsOnly) {
-        buildPiece("main", stackSize, hintsOnly, 1, 1, 0);
+    override fun survivalConstruct(stackSize: ItemStack, elementBudget: Int, env: ISurvivalBuildEnvironment): Int {
+        if (mMachine) return -1
+        return survivalBuildPiece("main", stackSize, 1, 1, 0, elementBudget, env, false, true)
     }
 
-    @Override
-    public int survivalConstruct(ItemStack stackSize, int elementBudget, ISurvivalBuildEnvironment env) {
-        if (mMachine) return -1;
-        return survivalBuildPiece("main", stackSize, 1, 1, 0, elementBudget, env, false, true);
-    }
+    override fun getRecipeMap(): RecipeMap<*> = RecipeMaps.pyrolyseRecipes
 
-    @Override
-    public RecipeMap<?> getRecipeMap() {
-        return RecipeMaps.pyrolyseRecipes;
-    }
+    override fun getStructureDefinition() = STRUCTURE_DEFINITION
 
-    @Override
-    public IStructureDefinition<MTECokeOven> getStructureDefinition() {
-        return STRUCTURE_DEFINITION;
-    }
-
-    @Override
-    protected MultiblockTooltipBuilder createTooltip() {
-        final MultiblockTooltipBuilder tt = new MultiblockTooltipBuilder();
+    override fun createTooltip(): MultiblockTooltipBuilder {
+        val tt = MultiblockTooltipBuilder()
         tt.addMachineType(StatCollector.translateToLocal("xnntech.coke_oven.gui.machine_type"))
             .addInfo(StatCollector.translateToLocal("xnntech.coke_oven.gui.info"))
             .addController(StatCollector.translateToLocal("xnntech.gui.front_center"))
             .addDynamicSpeedInfo(0.5f, TooltipTier.COIL)
             .addCasingInfoMin(StatCollector.translateToLocal("xnntech.coke_oven.gui.casing_info"), 8, false)
-            .beginStructureBlock(3, 3, 4, true)
-            .addPollutionAmount(getPollutionPerSecond(null))
-            .toolTipFinisher();
-        return tt;
+            .beginStructureBlock(3, 3, 4, true).addPollutionAmount(getPollutionPerSecond(null)).addAllHatchesNormal()
+            .addMufflerHatchNormal().toolTipFinisher()
+        return tt
     }
 
-    @Override
-    public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
-        coilHeat = HeatingCoilLevel.None;
-        mCasingAmount = 0;
-        return checkPiece("main", 1, 1, 0) && mCasingAmount >= 8
-            && mMaintenanceHatches.size() == 1
-            && !mMufflerHatches.isEmpty();
+    override fun checkMachine(aBaseMetaTileEntity: IGregTechTileEntity, aStack: ItemStack?): Boolean {
+        coilLevel = HeatingCoilLevel.None
+        mCasingAmount = 0
+        return checkPiece(
+            "main", 1, 1, 0
+        ) && mCasingAmount >= 8 && mMaintenanceHatches.size == 1 && !mMufflerHatches.isEmpty()
     }
 
-    @Override
-    public IMetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
-        return new MTECokeOven(this.mName);
-    }
+    override fun newMetaEntity(aTileEntity: IGregTechTileEntity) = MTECokeOven(this.mName)
 
-    @Override
-    protected ProcessingLogic createProcessingLogic() {
-        return new ProcessingLogic() {
-
-            @NotNull
-            @Override
-            public CheckRecipeResult process() {
-                setSpeedBonus(2f / (1 + coilHeat.getTier()));
-                return super.process();
+    override fun createProcessingLogic(): ProcessingLogic {
+        return object : ProcessingLogic() {
+            override fun process(): CheckRecipeResult {
+                setSpeedBonus((2.0 / (1 + coilLevel.tier)))
+                return super.process()
             }
-        };
+        }
     }
 
     /**
-     * Now Copy From {@link MTEPyrolyseOven#getTexture}
+     * Now Copy From [gregtech.common.tileentities.machines.multi.MTEPyrolyseOven.getTexture]
      */
-    @Override
-    public ITexture[] getTexture(IGregTechTileEntity baseMetaTileEntity, ForgeDirection sideDirection,
-        ForgeDirection facingDirection, int colorIndex, boolean active, boolean redstoneLevel) {
+    override fun getTexture(
+        baseMetaTileEntity: IGregTechTileEntity,
+        sideDirection: ForgeDirection,
+        facingDirection: ForgeDirection,
+        colorIndex: Int,
+        active: Boolean,
+        redstoneLevel: Boolean
+    ): Array<ITexture> {
         if (sideDirection == facingDirection) {
-            if (active) return new ITexture[] { Textures.BlockIcons.getCasingTextureForId(CASING_INDEX),
-                TextureFactory.builder()
-                    .addIcon(OVERLAY_FRONT_PYROLYSE_OVEN_ACTIVE)
-                    .extFacing()
+            if (active) return arrayOf(
+                Textures.BlockIcons.getCasingTextureForId(CASING_INDEX),
+                TextureFactory.builder().addIcon(Textures.BlockIcons.OVERLAY_FRONT_PYROLYSE_OVEN_ACTIVE).extFacing()
                     .build(),
-                TextureFactory.builder()
-                    .addIcon(OVERLAY_FRONT_PYROLYSE_OVEN_ACTIVE_GLOW)
-                    .extFacing()
-                    .glow()
-                    .build() };
-            return new ITexture[] { Textures.BlockIcons.getCasingTextureForId(CASING_INDEX), TextureFactory.builder()
-                .addIcon(OVERLAY_FRONT_PYROLYSE_OVEN)
-                .extFacing()
-                .build(),
-                TextureFactory.builder()
-                    .addIcon(OVERLAY_FRONT_PYROLYSE_OVEN_GLOW)
-                    .extFacing()
-                    .glow()
-                    .build() };
+                TextureFactory.builder().addIcon(Textures.BlockIcons.OVERLAY_FRONT_PYROLYSE_OVEN_ACTIVE_GLOW)
+                    .extFacing().glow().build()
+            )
+            return arrayOf(
+                Textures.BlockIcons.getCasingTextureForId(CASING_INDEX),
+                TextureFactory.builder().addIcon(Textures.BlockIcons.OVERLAY_FRONT_PYROLYSE_OVEN).extFacing().build(),
+                TextureFactory.builder().addIcon(Textures.BlockIcons.OVERLAY_FRONT_PYROLYSE_OVEN_GLOW).extFacing()
+                    .glow().build()
+            )
         }
-        return new ITexture[] { Textures.BlockIcons.getCasingTextureForId(CASING_INDEX) };
+        return arrayOf(Textures.BlockIcons.getCasingTextureForId(CASING_INDEX))
     }
 
-    public HeatingCoilLevel getCoilLevel() {
-        return coilHeat;
-    }
+    private fun onCasingAdded() = mCasingAmount++
 
-    private void setCoilLevel(HeatingCoilLevel aCoilLevel) {
-        coilHeat = aCoilLevel;
-    }
+    override fun getPollutionPerSecond(aStack: ItemStack?) = mPollutionPerSecond
 
-    private void onCasingAdded() {
-        mCasingAmount++;
-    }
+    override fun supportsVoidProtection() = true
 
-    @Override
-    public int getPollutionPerSecond(ItemStack aStack) {
-        return mPollutionPerSecond;
-    }
+    override fun supportsInputSeparation() = true
 
-    @Override
-    public boolean supportsVoidProtection() {
-        return true;
-    }
+    override fun supportsBatchMode() = true
 
-    @Override
-    public boolean supportsInputSeparation() {
-        return true;
-    }
-
-    @Override
-    public boolean supportsBatchMode() {
-        return true;
-    }
-
-    @Override
-    public boolean supportsSingleRecipeLocking() {
-        return true;
-    }
+    override fun supportsSingleRecipeLocking() = true
 
     @SideOnly(Side.CLIENT)
-    @Override
-    protected SoundResource getActivitySoundLoop() {
-        return SoundResource.GTCEU_LOOP_FIRE;
+    override fun getActivitySoundLoop(): SoundResource {
+        return SoundResource.GTCEU_LOOP_FIRE
     }
 }

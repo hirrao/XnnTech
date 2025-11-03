@@ -1,36 +1,27 @@
-package com.hirrao.xnntech.api.enums;
+package com.hirrao.xnntech.api.enums
 
-import net.minecraft.item.ItemStack;
+import com.hirrao.xnntech.utils.Log
+import gregtech.api.enums.ItemList
+import gregtech.api.util.GTUtility
+import net.minecraft.item.ItemStack
 
-import com.hirrao.xnntech.utils.Log;
-
-import gregtech.api.enums.ItemList;
-import gregtech.api.util.GTUtility;
-
-public enum ItemLists {
-
+enum class ItemLists {
     CokeOven,
     MultiFluidSolidifier;
 
-    private ItemStack mStack;
-    private boolean mHasNotBeenSet;
+    private lateinit var mStack: ItemStack
+    private var mHasNotBeenSet = false
 
-    public void set(ItemStack aStack) {
-        mHasNotBeenSet = false;
-        mStack = GTUtility.copyAmount(1, aStack);
+    fun set(aStack: ItemStack) {
+        mHasNotBeenSet = false
+        mStack = GTUtility.copyAmount(1, aStack)
     }
 
-    public ItemStack get(int aAmount) {
-        sanityCheck();
+    fun get(aAmount: Int): ItemStack {
         if (GTUtility.isStackInvalid(mStack)) {
-            Log.error("Object in the ItemList is null, {}", this.name());
-            return GTUtility.copyAmount(aAmount, ItemList.AcceleratorLV.get(1));
+            Log.error("Object in the ItemList is null,${this.name}")
+            return GTUtility.copyAmount(aAmount, ItemList.AcceleratorLV.get(1))
         }
-        return GTUtility.copyAmount(aAmount, mStack);
-    }
-
-    private void sanityCheck() {
-        if (mHasNotBeenSet)
-            throw new IllegalAccessError("The Enum '" + name() + "' has not been set to an Item at this time!");
+        return GTUtility.copyAmount(aAmount, mStack)
     }
 }

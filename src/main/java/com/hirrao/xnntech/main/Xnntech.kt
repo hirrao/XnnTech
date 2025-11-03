@@ -1,51 +1,37 @@
-package com.hirrao.xnntech.main;
+package com.hirrao.xnntech.main
 
-import static com.hirrao.xnntech.main.Info.*;
-
-import com.hirrao.xnntech.Tags;
-
-import cpw.mods.fml.common.Mod;
-import cpw.mods.fml.common.SidedProxy;
-import cpw.mods.fml.common.event.*;
+import com.hirrao.xnntech.Tags
+import cpw.mods.fml.common.Mod
+import cpw.mods.fml.common.SidedProxy
+import cpw.mods.fml.common.event.*
 
 @Mod(
-    modid = MODID,
+    modid = Info.MODID,
     version = Tags.VERSION,
-    name = NAME,
+    modLanguageAdapter = "net.shadowfacts.forgelin.KotlinAdapter",
+    name = Info.NAME,
     acceptedMinecraftVersions = "[1.7.10]",
-    dependencies = DEPENDENCIES)
-public class Xnntech {
-
-    @SidedProxy(clientSide = CLIENT_SIDE, serverSide = SERVER_SIDE)
-    public static CommonProxy proxy;
-
-    @Mod.EventHandler
-    // preInit "Run before anything else. Read your config, create blocks, items, etc, and register them with the
+    dependencies = Info.DEPENDENCIES
+)
+@SuppressWarnings("unused")
+object Xnntech {
+    @Mod.EventHandler // preInit "Run before anything else. Read your config, create blocks, items, etc, and register them with the
     // GameRegistry." (Remove if not needed)
-    public void preInit(FMLPreInitializationEvent event) {
-        proxy.preInit(event);
-    }
+    fun preInit(event: FMLPreInitializationEvent) = proxy.preInit(event)
+
+    @Mod.EventHandler // load "Do your mod setup. Build whatever data structures you care about. Register recipes." (Remove if not needed)
+    fun init(event: FMLInitializationEvent) = proxy.init(event)
+
+    @Mod.EventHandler // postInit "Handle interaction with other mods, complete your setup based on this." (Remove if not needed)
+    fun postInit(event: FMLPostInitializationEvent) = proxy.postInit(event)
 
     @Mod.EventHandler
-    // load "Do your mod setup. Build whatever data structures you care about. Register recipes." (Remove if not needed)
-    public void init(FMLInitializationEvent event) {
-        proxy.init(event);
-    }
+    fun completeInit(event: FMLLoadCompleteEvent) = proxy.completeInit(event)
 
-    @Mod.EventHandler
-    // postInit "Handle interaction with other mods, complete your setup based on this." (Remove if not needed)
-    public void postInit(FMLPostInitializationEvent event) {
-        proxy.postInit(event);
-    }
+    @Mod.EventHandler // register server commands in this event handler (Remove if not needed)
+    fun serverStarting(event: FMLServerStartingEvent) = proxy.serverStarting(event)
 
-    @Mod.EventHandler
-    public void CompleteInit(FMLLoadCompleteEvent event) {
-        proxy.CompleteInit(event);
-    }
+    @SidedProxy(clientSide = Info.CLIENT_SIDE, serverSide = Info.SERVER_SIDE)
+    lateinit var proxy: CommonProxy
 
-    @Mod.EventHandler
-    // register server commands in this event handler (Remove if not needed)
-    public void serverStarting(FMLServerStartingEvent event) {
-        proxy.serverStarting(event);
-    }
 }

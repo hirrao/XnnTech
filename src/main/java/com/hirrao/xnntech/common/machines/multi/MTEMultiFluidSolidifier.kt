@@ -1,182 +1,161 @@
-package com.hirrao.xnntech.common.machines.multi;
+package com.hirrao.xnntech.common.machines.multi
 
-import static com.gtnewhorizon.structurelib.structure.StructureUtility.*;
-import static gregtech.api.enums.HatchElement.*;
-import static gregtech.api.enums.Textures.BlockIcons.*;
-import static gregtech.api.util.GTStructureUtility.buildHatchAdder;
-import static gregtech.api.util.tooltip.TooltipTier.VOLTAGE;
+import com.gtnewhorizon.structurelib.alignment.constructable.ISurvivalConstructable
+import com.gtnewhorizon.structurelib.structure.IStructureDefinition
+import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment
+import com.gtnewhorizon.structurelib.structure.StructureDefinition
+import com.gtnewhorizon.structurelib.structure.StructureUtility.*
+import com.hirrao.xnntech.utils.addBusesNormal
+import com.hirrao.xnntech.utils.addEnergyHatchNormal
+import com.hirrao.xnntech.utils.addInputHatchNormal
+import com.hirrao.xnntech.utils.addMaintenanceNormal
+import gregtech.api.GregTechAPI
+import gregtech.api.enums.HatchElement
+import gregtech.api.enums.Textures
+import gregtech.api.interfaces.ITexture
+import gregtech.api.interfaces.tileentity.IGregTechTileEntity
+import gregtech.api.logic.ProcessingLogic
+import gregtech.api.metatileentity.implementations.MTEExtendedPowerMultiBlockBase
+import gregtech.api.recipe.RecipeMap
+import gregtech.api.recipe.RecipeMaps
+import gregtech.api.render.TextureFactory
+import gregtech.api.util.GTStructureUtility.buildHatchAdder
+import gregtech.api.util.GTUtility
+import gregtech.api.util.MultiblockTooltipBuilder
+import gregtech.api.util.tooltip.TooltipTier
+import gregtech.common.blocks.BlockCasings10
+import net.minecraft.item.ItemStack
+import net.minecraft.util.StatCollector
+import net.minecraftforge.common.util.ForgeDirection
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.StatCollector;
-import net.minecraftforge.common.util.ForgeDirection;
-
-import com.gtnewhorizon.structurelib.alignment.constructable.ISurvivalConstructable;
-import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
-import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
-import com.gtnewhorizon.structurelib.structure.StructureDefinition;
-
-import gregtech.api.GregTechAPI;
-import gregtech.api.enums.Textures;
-import gregtech.api.interfaces.ITexture;
-import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
-import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
-import gregtech.api.logic.ProcessingLogic;
-import gregtech.api.metatileentity.implementations.MTEExtendedPowerMultiBlockBase;
-import gregtech.api.recipe.RecipeMap;
-import gregtech.api.recipe.RecipeMaps;
-import gregtech.api.render.TextureFactory;
-import gregtech.api.util.GTUtility;
-import gregtech.api.util.MultiblockTooltipBuilder;
-import gregtech.common.blocks.BlockCasings10;
-import gregtech.common.tileentities.machines.multi.MTEMultiSolidifier;
-
-public class MTEMultiFluidSolidifier extends MTEExtendedPowerMultiBlockBase<MTEMultiFluidSolidifier>
-    implements ISurvivalConstructable {
-
-    private static final IStructureDefinition<MTEMultiFluidSolidifier> STRUCTURE_DEFINITION = StructureDefinition
-        .<MTEMultiFluidSolidifier>builder()
-        .addShape(
-            "main",
-            transpose(
-                new String[][] { { "ttttt", "ttttt", "ttttt" }, { "tt~tt", "tc-ct", "ttttt" },
-                    { "ttttt", "ttttt", "ttttt" } }))
-        .addElement('c', ofBlock(GregTechAPI.sBlockCasings10, 14))
-        .addElement(
-            't',
-            buildHatchAdder(MTEMultiFluidSolidifier.class).atLeast(InputBus, InputHatch, OutputBus, Maintenance, Energy)
-                .casingIndex(((BlockCasings10) GregTechAPI.sBlockCasings10).getTextureIndex(13))
-                .dot(1)
-                .buildAndChain(
-                    onElementPass(MTEMultiFluidSolidifier::onCasingAdded, ofBlock(GregTechAPI.sBlockCasings10, 13))))
-        .build();
-    private int mCasingAmount;
-
-    public MTEMultiFluidSolidifier(String aName) {
-        super(aName);
+class MTEMultiFluidSolidifier : MTEExtendedPowerMultiBlockBase<MTEMultiFluidSolidifier>, ISurvivalConstructable {
+    companion object {
+        private const val BASE_PARALLEL = 16
+        private val STRUCTURE_DEFINITION: IStructureDefinition<MTEMultiFluidSolidifier> =
+            StructureDefinition.builder<MTEMultiFluidSolidifier>().addShape(
+                "main", transpose(
+                    arrayOf(
+                        arrayOf("ttttt", "ttttt", "ttttt"),
+                        arrayOf("tt~tt", "tc-ct", "ttttt"),
+                        arrayOf("ttttt", "ttttt", "ttttt")
+                    )
+                )
+            ).addElement('c', ofBlock(GregTechAPI.sBlockCasings10, 14)).addElement(
+                't', buildHatchAdder(MTEMultiFluidSolidifier::class.java).atLeast(
+                    HatchElement.InputBus,
+                    HatchElement.InputHatch,
+                    HatchElement.OutputBus,
+                    HatchElement.Maintenance,
+                    HatchElement.Energy
+                ).casingIndex((GregTechAPI.sBlockCasings10 as BlockCasings10).getTextureIndex(13)).dot(1).buildAndChain(
+                    onElementPass(
+                        { obj -> obj.onCasingAdded() }, ofBlock(GregTechAPI.sBlockCasings10, 13)
+                    )
+                )
+            ).build()
     }
 
-    public MTEMultiFluidSolidifier(int aID, String aName, String aNameRegional) {
-        super(aID, aName, aNameRegional);
+    private var mCasingAmount = 0
+
+    constructor(aName: String) : super(aName)
+
+    constructor(aID: Int, aName: String, aNameRegional: String) : super(aID, aName, aNameRegional)
+
+    override fun getRecipeMap(): RecipeMap<*> = RecipeMaps.fluidSolidifierRecipes
+
+    override fun construct(stackSize: ItemStack, hintsOnly: Boolean) {
+        buildPiece("main", stackSize, hintsOnly, 2, 1, 0)
     }
 
-    @Override
-    public RecipeMap<?> getRecipeMap() {
-        return RecipeMaps.fluidSolidifierRecipes;
+    override fun survivalConstruct(stackSize: ItemStack, elementBudget: Int, env: ISurvivalBuildEnvironment): Int {
+        if (mMachine) return -1
+        return survivalBuildPiece("main", stackSize, 2, 1, 0, elementBudget, env, false, true)
     }
 
-    @Override
-    public void construct(ItemStack stackSize, boolean hintsOnly) {
-        buildPiece("main", stackSize, hintsOnly, 2, 1, 0);
-    }
+    override fun getStructureDefinition()= STRUCTURE_DEFINITION
 
-    @Override
-    public int survivalConstruct(ItemStack stackSize, int elementBudget, ISurvivalBuildEnvironment env) {
-        if (mMachine) return -1;
-        return survivalBuildPiece("main", stackSize, 2, 1, 0, elementBudget, env, false, true);
-    }
-
-    @Override
-    public IStructureDefinition<MTEMultiFluidSolidifier> getStructureDefinition() {
-        return STRUCTURE_DEFINITION;
-    }
-
-    @Override
-    protected MultiblockTooltipBuilder createTooltip() {
-        final MultiblockTooltipBuilder tt = new MultiblockTooltipBuilder();
+    override fun createTooltip(): MultiblockTooltipBuilder {
+        val tt = MultiblockTooltipBuilder()
         tt.addMachineType(StatCollector.translateToLocal("xnntech.multi_fluid_solidifier.gui.machine_type"))
-            .addInfo(StatCollector.translateToLocal("xnntech.multi_fluid_solidifier.gui.info"))
-            .addStaticSpeedInfo(2.0f)
-            .addDynamicParallelInfo(4, VOLTAGE)
+            .addInfo(StatCollector.translateToLocal("xnntech.multi_fluid_solidifier.gui.info")).addStaticSpeedInfo(2.0f)
+            .addDynamicParallelInfo(BASE_PARALLEL, TooltipTier.VOLTAGE)
             .addController(StatCollector.translateToLocal("xnntech.gui.front_center"))
-            .beginStructureBlock(5, 3, 3, true)
-            .toolTipFinisher();
-        return tt;
+            .beginStructureBlock(5, 3, 3, true).addInputHatchNormal().addBusesNormal().addEnergyHatchNormal()
+            .addMaintenanceNormal().toolTipFinisher()
+        return tt
     }
 
-    @Override
-    public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
-        return checkPiece("main", 2, 1, 0) && mCasingAmount >= 12 && mMaintenanceHatches.size() == 1;
+    override fun checkMachine(aBaseMetaTileEntity: IGregTechTileEntity, aStack: ItemStack?): Boolean {
+        return checkPiece("main", 2, 1, 0) && mCasingAmount >= 12 && mMaintenanceHatches.size == 1
     }
 
-    @Override
-    protected ProcessingLogic createProcessingLogic() {
-        return new ProcessingLogic().setSpeedBonus(1f / 2f)
-            .setMaxParallelSupplier(this::getTrueParallel);
-    }
+    override fun createProcessingLogic(): ProcessingLogic =
+        ProcessingLogic().setSpeedBonus(1.0 / 2.0).setMaxParallelSupplier { this.trueParallel }
 
-    @Override
-    public int getMaxParallelRecipes() {
-        return (4 * GTUtility.getTier(this.getMaxInputVoltage()));
-    }
 
-    @Override
-    public IMetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
-        return new MTEMultiFluidSolidifier(this.mName);
-    }
+    override fun getMaxParallelRecipes() = (BASE_PARALLEL * GTUtility.getTier(this.maxInputVoltage))
+
+    override fun newMetaEntity(aTileEntity: IGregTechTileEntity) = MTEMultiFluidSolidifier(this.mName)
 
     /**
-     * From {@link MTEMultiSolidifier#getTexture}
+     * From [gregtech.common.tileentities.machines.multi.MTEMultiSolidifier.getTexture]
      */
-    @Override
-    public ITexture[] getTexture(IGregTechTileEntity baseMetaTileEntity, ForgeDirection side, ForgeDirection facing,
-        int colorIndex, boolean active, boolean redstoneLevel) {
-        ITexture[] rTexture;
+    override fun getTexture(
+        baseMetaTileEntity: IGregTechTileEntity,
+        side: ForgeDirection,
+        facing: ForgeDirection,
+        colorIndex: Int,
+        active: Boolean,
+        redstoneLevel: Boolean
+    ): Array<ITexture> {
+        val rTexture: Array<ITexture>
         if (side == facing) {
             if (active) {
-                rTexture = new ITexture[] {
-                    Textures.BlockIcons
-                        .getCasingTextureForId(GTUtility.getCasingTextureIndex(GregTechAPI.sBlockCasings10, 13)),
-                    TextureFactory.builder()
-                        .addIcon(OVERLAY_FRONT_MULTI_CANNER_ACTIVE)
-                        .extFacing()
+                rTexture = arrayOf(
+                    Textures.BlockIcons.getCasingTextureForId(
+                        GTUtility.getCasingTextureIndex(
+                            GregTechAPI.sBlockCasings10, 13
+                        )
+                    ),
+                    TextureFactory.builder().addIcon(Textures.BlockIcons.OVERLAY_FRONT_MULTI_CANNER_ACTIVE).extFacing()
                         .build(),
-                    TextureFactory.builder()
-                        .addIcon(OVERLAY_FRONT_MULTI_CANNER_ACTIVE_GLOW)
-                        .extFacing()
-                        .glow()
-                        .build() };
+                    TextureFactory.builder().addIcon(Textures.BlockIcons.OVERLAY_FRONT_MULTI_CANNER_ACTIVE_GLOW)
+                        .extFacing().glow().build()
+                )
             } else {
-                rTexture = new ITexture[] {
-                    Textures.BlockIcons
-                        .getCasingTextureForId(GTUtility.getCasingTextureIndex(GregTechAPI.sBlockCasings10, 13)),
-                    TextureFactory.builder()
-                        .addIcon(OVERLAY_FRONT_MULTI_CANNER)
-                        .extFacing()
+                rTexture = arrayOf(
+                    Textures.BlockIcons.getCasingTextureForId(
+                        GTUtility.getCasingTextureIndex(
+                            GregTechAPI.sBlockCasings10, 13
+                        )
+                    ),
+                    TextureFactory.builder().addIcon(Textures.BlockIcons.OVERLAY_FRONT_MULTI_CANNER).extFacing()
                         .build(),
-                    TextureFactory.builder()
-                        .addIcon(OVERLAY_FRONT_MULTI_CANNER_GLOW)
-                        .extFacing()
-                        .glow()
-                        .build() };
+                    TextureFactory.builder().addIcon(Textures.BlockIcons.OVERLAY_FRONT_MULTI_CANNER_GLOW).extFacing()
+                        .glow().build()
+                )
             }
         } else {
-            rTexture = new ITexture[] { Textures.BlockIcons
-                .getCasingTextureForId(GTUtility.getCasingTextureIndex(GregTechAPI.sBlockCasings10, 13)) };
+            rTexture = arrayOf(
+                Textures.BlockIcons.getCasingTextureForId(
+                    GTUtility.getCasingTextureIndex(
+                        GregTechAPI.sBlockCasings10, 13
+                    )
+                )
+            )
         }
-        return rTexture;
+        return rTexture
     }
 
-    @Override
-    public boolean supportsVoidProtection() {
-        return true;
-    }
+    override fun supportsVoidProtection() = true
 
-    @Override
-    public boolean supportsInputSeparation() {
-        return true;
-    }
+    override fun supportsInputSeparation() = true
 
-    @Override
-    public boolean supportsBatchMode() {
-        return true;
-    }
+    override fun supportsBatchMode() = true
 
-    @Override
-    public boolean supportsSingleRecipeLocking() {
-        return true;
-    }
+    override fun supportsSingleRecipeLocking() = true
 
-    private void onCasingAdded() {
-        mCasingAmount++;
+    private fun onCasingAdded() {
+        mCasingAmount++
     }
 }
