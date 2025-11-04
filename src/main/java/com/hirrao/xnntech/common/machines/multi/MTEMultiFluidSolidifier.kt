@@ -79,8 +79,9 @@ class MTEMultiFluidSolidifier : MTEExtendedPowerMultiBlockBase<MTEMultiFluidSoli
         tt.addMachineType(StatCollector.translateToLocal("xnntech.multi_fluid_solidifier.gui.machine_type"))
             .addInfo(StatCollector.translateToLocal("xnntech.multi_fluid_solidifier.gui.info")).addStaticSpeedInfo(2.0f)
             .addDynamicParallelInfo(BASE_PARALLEL, TooltipTier.VOLTAGE)
+            .beginStructureBlock(5, 3, 3, true)
             .addController(StatCollector.translateToLocal("xnntech.gui.front_center"))
-            .beginStructureBlock(5, 3, 3, true).addInputHatchNormal().addBusesNormal().addEnergyHatchNormal()
+            .addInputHatchNormal().addBusesNormal().addEnergyHatchNormal()
             .addMaintenanceNormal().toolTipFinisher()
         return tt
     }

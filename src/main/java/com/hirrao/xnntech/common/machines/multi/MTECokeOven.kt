@@ -87,10 +87,11 @@ class MTECokeOven : MTEExtendedPowerMultiBlockBase<MTECokeOven>, ISurvivalConstr
         val tt = MultiblockTooltipBuilder()
         tt.addMachineType(StatCollector.translateToLocal("xnntech.coke_oven.gui.machine_type"))
             .addInfo(StatCollector.translateToLocal("xnntech.coke_oven.gui.info"))
-            .addController(StatCollector.translateToLocal("xnntech.gui.front_center"))
             .addDynamicSpeedInfo(0.5f, TooltipTier.COIL)
             .addCasingInfoMin(StatCollector.translateToLocal("xnntech.coke_oven.gui.casing_info"), 8, false)
-            .beginStructureBlock(3, 3, 4, true).addPollutionAmount(getPollutionPerSecond(null)).addAllHatchesNormal()
+            .beginStructureBlock(3, 3, 4, true).addPollutionAmount(getPollutionPerSecond(null))
+            .addController(StatCollector.translateToLocal("xnntech.gui.front_center"))
+            .addAllHatchesNormal()
             .addMufflerHatchNormal().toolTipFinisher()
         return tt
     }
