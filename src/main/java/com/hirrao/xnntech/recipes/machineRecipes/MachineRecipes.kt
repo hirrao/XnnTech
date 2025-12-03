@@ -3,6 +3,7 @@ package com.hirrao.xnntech.recipes.machineRecipes
 import com.hirrao.xnntech.config.CommonConfig
 import gregtech.api.enums.GTValues
 import gregtech.api.enums.ItemList
+import gregtech.api.enums.Materials
 import gregtech.api.enums.Mods
 import gregtech.api.recipe.RecipeMaps
 import gregtech.api.util.GTModHandler
@@ -14,6 +15,11 @@ val FLUID_INTERFACE: ItemStack? = GTModHandler.getModItem(Mods.AE2FluidCraft.ID,
 val ACCELERATION_CARD_4: ItemStack? =
     GTModHandler.getModItem(Mods.AppliedEnergistics2.ID, "item.ItemMultiMaterial", 4, 30)
 val WIRELESS_KIT_2: ItemStack? = GTModHandler.getModItem(Mods.AE2Stuff.ID, "Wireless", 2)
+
+fun loadMachineRecipes(){
+    loadMEInputRecipes()
+    loadProgramableHatchesRecipes()
+}
 
 fun loadMEInputRecipes() {
     if (CommonConfig.enableMEInputRecipes) {
@@ -30,5 +36,17 @@ fun loadMEInputRecipes() {
                 ItemList.Hatch_Input_Bus_ME.get(1)
             ).itemOutputs(ItemList.Hatch_CraftingInput_Bus_Slave.get(1)).duration(15 * GTRecipeBuilder.SECONDS)
             .eut(7680).addTo(RecipeMaps.assemblerRecipes)
+    }
+}
+
+fun loadProgramableHatchesRecipes() {
+    if (com.hirrao.xnntech.common.xmod.enums.Mods.ProgrammableHatches.isModLoaded == true && CommonConfig.enableProgrammableHatchesRecipes && CommonConfig.enableMEInputRecipes) {
+        val PROGRAMMING_COVER = GTModHandler.getModItem(com.hirrao.xnntech.common.xmod.enums.Mods.ProgrammableHatches.id, "proghatches.cover", 1L, 0)
+        val PROGRAMMABLE_CRAFTINGINPUT_BUFFER =
+            GTModHandler.getModItem(gregtech.api.enums.Mods.GregTech.ID, "gt.blockmachines", 1, 22069)
+        // 编程样板输入总成配方
+        GTValues.RA.stdBuilder().itemInputs(ItemList.Hatch_CraftingInput_Bus_ME.get(1), PROGRAMMING_COVER)
+            .fluidInputs(Materials.AdvancedGlue.getFluid(4000)).itemOutputs(PROGRAMMABLE_CRAFTINGINPUT_BUFFER)
+            .duration(20 * GTRecipeBuilder.SECONDS).eut(7680).addTo(RecipeMaps.mixerRecipes)
     }
 }
