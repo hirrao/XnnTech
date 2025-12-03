@@ -17,10 +17,12 @@ val WIRELESS_KIT_2: ItemStack? = GTModHandler.getModItem(Mods.AE2Stuff.ID, "Wire
 
 fun loadMEInputRecipes() {
     if (CommonConfig.enableMEInputRecipes) {
+        //存储输入仓
         GTValues.RA.stdBuilder().itemInputs(
                 GTUtility.getIntegratedCircuit(1), ItemList.Hatch_Input_HV.get(1), FLUID_INTERFACE, ACCELERATION_CARD_4
             ).itemOutputs(ItemList.Hatch_Input_ME.get(1)).duration(15 * GTRecipeBuilder.SECONDS).eut(480)
             .addTo(RecipeMaps.assemblerRecipes)
+        //样板输入镜像
         GTValues.RA.stdBuilder().itemInputs(
                 GTUtility.getIntegratedCircuit(3),
                 WIRELESS_KIT_2,
