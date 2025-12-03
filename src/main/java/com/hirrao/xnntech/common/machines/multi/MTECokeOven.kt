@@ -7,6 +7,7 @@ import com.gtnewhorizon.structurelib.structure.StructureDefinition
 import com.gtnewhorizon.structurelib.structure.StructureUtility.*
 import com.hirrao.xnntech.utils.addAllHatchesNormal
 import com.hirrao.xnntech.utils.addMufflerHatchNormal
+import com.hirrao.xnntech.utils.tr
 import cpw.mods.fml.relauncher.Side
 import cpw.mods.fml.relauncher.SideOnly
 import gregtech.api.GregTechAPI
@@ -85,12 +86,12 @@ class MTECokeOven : MTEExtendedPowerMultiBlockBase<MTECokeOven>, ISurvivalConstr
 
     override fun createTooltip(): MultiblockTooltipBuilder {
         val tt = MultiblockTooltipBuilder()
-        tt.addMachineType(StatCollector.translateToLocal("xnntech.coke_oven.gui.machine_type"))
-            .addInfo(StatCollector.translateToLocal("xnntech.coke_oven.gui.info"))
+        tt.addMachineType(tr("xnntech.coke_oven.gui.machine_type"))
+            .addInfo(tr("xnntech.coke_oven.gui.info"))
             .addDynamicSpeedInfo(0.5f, TooltipTier.COIL)
-            .addCasingInfoMin(StatCollector.translateToLocal("xnntech.coke_oven.gui.casing_info"), 8, false)
+            .addCasingInfoMin(tr("xnntech.coke_oven.gui.casing_info"), 8, false)
             .beginStructureBlock(3, 3, 4, true).addPollutionAmount(getPollutionPerSecond(null))
-            .addController(StatCollector.translateToLocal("xnntech.gui.front_center"))
+            .addController(tr("xnntech.gui.front_center"))
             .addAllHatchesNormal()
             .addMufflerHatchNormal().toolTipFinisher()
         return tt

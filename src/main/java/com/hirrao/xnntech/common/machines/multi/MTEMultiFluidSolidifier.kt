@@ -9,6 +9,7 @@ import com.hirrao.xnntech.utils.addBusesNormal
 import com.hirrao.xnntech.utils.addEnergyHatchNormal
 import com.hirrao.xnntech.utils.addInputHatchNormal
 import com.hirrao.xnntech.utils.addMaintenanceNormal
+import com.hirrao.xnntech.utils.tr
 import gregtech.api.GregTechAPI
 import gregtech.api.enums.HatchElement
 import gregtech.api.enums.Textures
@@ -76,11 +77,11 @@ class MTEMultiFluidSolidifier : MTEExtendedPowerMultiBlockBase<MTEMultiFluidSoli
 
     override fun createTooltip(): MultiblockTooltipBuilder {
         val tt = MultiblockTooltipBuilder()
-        tt.addMachineType(StatCollector.translateToLocal("xnntech.multi_fluid_solidifier.gui.machine_type"))
-            .addInfo(StatCollector.translateToLocal("xnntech.multi_fluid_solidifier.gui.info")).addStaticSpeedInfo(2.0f)
+        tt.addMachineType(tr("xnntech.multi_fluid_solidifier.gui.machine_type"))
+            .addInfo(tr("xnntech.multi_fluid_solidifier.gui.info")).addStaticSpeedInfo(2.0f)
             .addDynamicParallelInfo(BASE_PARALLEL, TooltipTier.VOLTAGE)
             .beginStructureBlock(5, 3, 3, true)
-            .addController(StatCollector.translateToLocal("xnntech.gui.front_center"))
+            .addController(tr("xnntech.gui.front_center"))
             .addInputHatchNormal().addBusesNormal().addEnergyHatchNormal()
             .addMaintenanceNormal().toolTipFinisher()
         return tt

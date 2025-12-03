@@ -1,9 +1,8 @@
 package com.hirrao.xnntech.utils
 
 import gregtech.api.util.MultiblockTooltipBuilder
-import net.minecraft.util.StatCollector
 
-private val ANY_CASING = StatCollector.translateToLocal("xnntech.gui.any_casing")
+private val ANY_CASING = tr("xnntech.gui.any_casing")
 
 fun MultiblockTooltipBuilder.addInputHatchNormal(): MultiblockTooltipBuilder = addInputHatch(ANY_CASING)
 

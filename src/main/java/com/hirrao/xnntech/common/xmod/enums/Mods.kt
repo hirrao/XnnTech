@@ -2,7 +2,7 @@ package com.hirrao.xnntech.common.xmod.enums
 
 import cpw.mods.fml.common.Loader
 
-enum class Mods(val id: String) {
+enum class ModsEnum(val id: String) {
     ProgrammableHatches(Names.PROGRAMMABLE_HATCHES);
 
     var isModLoaded: Boolean? = null
